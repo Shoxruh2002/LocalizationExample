@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.LocaleResolver;
-import org.springframework.web.servlet.i18n.SessionLocaleResolver;
+import org.springframework.web.servlet.i18n.AcceptHeaderLocaleResolver;
 
 import java.util.Locale;
 
@@ -24,9 +24,9 @@ public class LocalizationExampleApplication {
 
     @Bean
     public LocaleResolver localeResolver() {
-        SessionLocaleResolver sessionLocaleResolver = new SessionLocaleResolver();
-        sessionLocaleResolver.setDefaultLocale(Locale.US);
-        return sessionLocaleResolver;
+        AcceptHeaderLocaleResolver localeResolver = new AcceptHeaderLocaleResolver();
+        localeResolver.setDefaultLocale(Locale.US);
+        return localeResolver;
     }
 
     @Bean
@@ -40,19 +40,19 @@ public class LocalizationExampleApplication {
 }
 
 @RestController
-@RequestMapping( "/hello/world" )
+@RequestMapping("/hello/world")
 class Controller {
 
     @Autowired
     MessageSource messageSource;
 
-    @GetMapping( "/hello-header" )
-    public String hello(@RequestHeader( required = false, name = "Accept-Language" ) Locale locale) {
+    @GetMapping("/hello-header")
+    public String hello(@RequestHeader(required = false, name = "Accept-Language") Locale locale) {
         return messageSource.getMessage("hello.world", null, locale);
     }
 
-    @GetMapping( "/hello-param" )
-    public String helloparam(@RequestParam( "locale" ) Locale locale) {
+    @GetMapping("/hello-param")
+    public String helloparam(@RequestParam("locale") Locale locale) {
         return messageSource.getMessage("hello.world", null, locale);
     }
 
